@@ -654,7 +654,7 @@ def get_field_at_index(fields, index, csv_decimal_comma, ledger_decimal_comma):
 
     raw_value = fields[abs(index) - 1]
     # Add negative symbol to raw_value if between parentheses
-    # E.g.  ($13.37) becomes -$13.37
+    # E.g. ($13.37) becomes -$13.37
     if raw_value.startswith("(") and raw_value.endswith(")"):
         raw_value = "-" + raw_value[1:-1]
 
@@ -823,7 +823,7 @@ def prompt_for_value(prompt, values, default):
         return None
 
     # There are no word deliminators as each account name
-    # is one word.  eg ':' and ' ' are valid parts of account
+    # is one word. eg ':' and ' ' are valid parts of account
     # name and don't indicate a new word
     readline.set_completer_delims("")
     readline.set_completer(completer)

@@ -133,7 +133,7 @@ Account`.
 
 **`--src-account STR`**
 
-similar to `--account` option, it is the ledger account used as source for ledger transactions but allows the `--account` option to be overridden after the config file has been parsed.  This is a command-line only option and must not be provided in any section of the config file.  Use of this option allows users to treat sections of the config file as generic import recipes that can be used to import all files that use the same layout while providing a means to specify the ledger source account to use during the importing of transactions.
+similar to `--account` option, it is the ledger account used as source for ledger transactions but allows the `--account` option to be overridden after the config file has been parsed. This is a command-line only option and must not be provided in any section of the config file. Use of this option allows users to treat sections of the config file as generic import recipes that can be used to import all files that use the same layout while providing a means to specify the ledger source account to use during the importing of transactions.
 
 **`--clear-screen, -C`**
 
@@ -308,15 +308,15 @@ will print ledger entries in reverse of their order in the CSV file.
 
 **`--skip-dupes`**
 
-will attempt to detect duplicate transactions in ledger file by comparing MD5Sum of transactions.  The MD5Sum is calculated from the raw CSV string, with the source account appended to avoid false positives on generic transaction descriptions when the source account is different and thus should not be considered a duplicate. MD5Sum of existing transactions are included as a `; MD5Sum: ...` comment in the current ledger file (which means your output template will need this comment). This can help if you download statements without using a precise date range. A useful pattern is to include MD5Sum comments for both "sides" of a transaction if you download from multiple sources that resolve to a single transaction (e.g. paying a credit card from checking).
+will attempt to detect duplicate transactions in ledger file by comparing MD5Sum of transactions. The MD5Sum is calculated from the raw CSV string, with the source account appended to avoid false positives on generic transaction descriptions when the source account is different and thus should not be considered a duplicate. MD5Sum of existing transactions are included as a `; MD5Sum: ...` comment in the current ledger file (which means your output template will need this comment). This can help if you download statements without using a precise date range. A useful pattern is to include MD5Sum comments for both "sides" of a transaction if you download from multiple sources that resolve to a single transaction (e.g. paying a credit card from checking).
 
 The elements that are hashed have changed over time; if you'd like to check for all possible hashes (inc. those created via older versions of icsv2ledger), see `--depreciated-md5`.
 
-Use of this flag by itself will detect and skip duplicate entries automatically with no interaction from user.  If you want to be prompted and determine whether to skip or not see `--confirm-dupes`.
+Use of this flag by itself will detect and skip duplicate entries automatically with no interaction from user. If you want to be prompted and determine whether to skip or not see `--confirm-dupes`.
 
 **`--confirm-dupes`**
 
-same as `--skip-dupes` but will prompt user to indicate if they want the detected duplicate entry to be skipped or treated as a valid entry.  This is useful when importing transactions that commonly contain generic descriptions.
+same as `--skip-dupes` but will prompt user to indicate if they want the detected duplicate entry to be skipped or treated as a valid entry. This is useful when importing transactions that commonly contain generic descriptions.
 
 **`--depreciated-md5`**
 
@@ -365,7 +365,7 @@ will prompt user before adding entries to the mapping file. This is useful when 
 
 **`--entry-review`**
 
-allows the ability to review the generated ledger entry and Commit, Modify or Skip the entry.  If the entry is not committed then the values for payee, account and optionally tags is prompted for again.
+allows the ability to review the generated ledger entry and Commit, Modify or Skip the entry. If the entry is not committed then the values for payee, account and optionally tags is prompted for again.
 
 Example
 -------
