@@ -1,3 +1,4 @@
 .idea
 .icsv2ledgerrc*
 tests/.pytest_cache
+__pycache__
