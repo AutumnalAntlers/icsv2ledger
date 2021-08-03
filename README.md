@@ -418,6 +418,39 @@ CHQ.
     mapping_file=mappings.CHQ
     skip_lines=0
 
+YAML configuration example
+--------------------------
+
+Configuration files ending in `.yaml` or `.yml` will be parsed with
+PyYaml if availible, allowing the use of anchors, filters, and other
+YAML-spec features.
+
+Note that options are an unordered list, and that the `desc` field
+must be quoted to explicitly denote a string.
+
+    ---
+    
+    BROKERAGE_ACCT: &BROKERAGE_ACCT
+      currency: USD
+      ledger_date_format: '%Y/%m/%d'
+      ledger-decimal-comma: 1
+      skip_lines: 1
+      credit: 0
+      mapping_file: ./mappings/BROKERAGE_ACCT.map
+      account: Assets:Brokerage:Example
+      csv_date_format: '%Y-%m-%dT%H:%M:%S.%fZ'
+      reverse: 0
+      date: 3
+      desc: '2,7'
+      debit: 5
+    
+    BROKERAGE_FILLS:
+      <<: *BROKERAGE_ACCT
+      mapping_file: ./mappings/BROKERAGE_FILLS.map
+      date: 5
+      desc: '4'
+      debit: 11
+
 
 Addons
 ------

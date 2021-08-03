@@ -212,12 +212,14 @@ def parse_args_and_config_file():
     if args.config_file and ('-h' not in remaining_argv and
                              '--help' not in remaining_argv):
         # For .yaml files
-        if args.config_file.endswith('.yaml'):
+        if args.config_file.endswith('.yaml') or args.config_file.endswith('.yml'):
             with open(args.config_file, 'r') as stream:
                 try:
                     from yaml import safe_load, YAMLError
                     config = configparser.RawConfigParser(DEFAULTS)
-                    config.read_dict(safe_load(stream))
+                    result=safe_load(stream)
+                    print(result)
+                    config.read_dict(result)
                 except (ImportError, ModuleNotFoundError) as exc:
                     print(exc)
                     print("YAML config provided, but PyYAML could not be imported:\n"
