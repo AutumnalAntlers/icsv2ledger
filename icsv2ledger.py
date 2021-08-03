@@ -16,7 +16,6 @@ import hashlib
 import re
 import subprocess
 import readline
-import yaml
 import configparser
 from argparse import HelpFormatter
 from dataclasses import dataclass
@@ -216,9 +215,16 @@ def parse_args_and_config_file():
         if args.config_file.endswith('.yaml'):
             with open(args.config_file, 'r') as stream:
                 try:
+                    from yaml import safe_load, YAMLError
                     config = configparser.RawConfigParser(DEFAULTS)
-                    config.read_dict(yaml.safe_load(stream))
-                except yaml.YAMLError as exc:
+                    config.read_dict(safe_load(stream))
+                except (ImportError, ModuleNotFoundError) as exc:
+                    print(exc)
+                    print("YAML config provided, but PyYAML could not be imported:\n"
+                          "Please ensure it has been installed, eg. via pip:\n"
+                          "    pip install PyYAML")
+                    sys.exit(1)
+                except YAMLError as exc:
                     print(exc)
                     sys.exit(1)
         # For original configparser files
