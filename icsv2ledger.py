@@ -212,27 +212,28 @@ def parse_args_and_config_file():
     # Initialize configparser with DEFAULTS, and then read config file
     if args.config_file and ('-h' not in remaining_argv and
                              '--help' not in remaining_argv):
+        # For .yaml files
         if args.config_file.endswith('.yaml'):
             with open("config.yaml", 'r') as stream:
                 try:
                     config = yaml.safe_load(stream)
                 except yaml.YAMLError as exc:
                     print(exc)
+        # For original configparser files
         else:
             config = configparser.RawConfigParser(DEFAULTS)
             config.read(args.config_file)
-        print(config)
-        print(config[args.account])
+        # Ensure args.account section exists
         if not (config[args.account] or config.has_section(args.account)):
             print('Config file {0} does not contain section {1}'
                   .format(args.config_file, args.account),
                   file=sys.stderr)
             sys.exit(1)
+        # Save args.account section as dict 'defaults'
         if args.config_file.endswith('.yaml'):
             defaults = {**DEFAULTS, **config[args.account]}
         else:
             defaults = dict(config.items(args.account))
-        print(defaults)
 
         if defaults['src_account']:
             print('Section {0} in config file {1} contains command line only option src_account'
@@ -240,24 +241,19 @@ def parse_args_and_config_file():
                   file=sys.stderr)
             sys.exit(1)
 
+        def parse_addons():
+            for item in config[args.account + '_addons'].items():
+                if item not in DEFAULTS.items():
+                    defaults['addons']['addon_' + item[0]] = int(item[1])
+
         defaults['addons'] = {}
+        # For .yaml files
         if args.config_file.endswith('.yaml'):
-            try:
-                config[args.account + '_addons']
-            except KeyError:
-                pass
-            else:
-                # TODO: UNFINISHED
-                for item in config[args.account + '_addons']:
-                    sys.exit(1)
-                    if item not in config.defaults().items():
-                        defaults['addons']['addon_' + item[0]] = int(item[1])
-        else:
-            # TODO: UNTESTED
-            if config.has_section(args.account + '_addons'):
-                for item in config.items(args.account + '_addons'):
-                    if item not in config.defaults().items():
-                        defaults['addons']['addon_' + item[0]] = int(item[1])
+            if args.account + '_addons' in config:
+                parse_addons()
+        # For original configparser files
+        elif config.has_section(args.account + '_addons'):
+            parse_addons()
     else:
         # no config file found
         defaults = DEFAULTS

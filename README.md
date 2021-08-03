@@ -148,11 +148,15 @@ are `*` or `!` or ` `. Default is `*`.
 
 is configuration filename.
 
+Filenames ending in .yaml will be parsed with PyYAML,
+otherwise with configparser (INI style, see examples).
+
 The file used will be first found in that order:
 
 1. Filename given on command line with `--config-file`,
-2. `.icsv2ledgerrc` in current directory,
-3. `.icsv2ledgerrc` in home directory.
+2. `config.yaml`    in current directory,
+3. `.icsv2ledgerrc` in current directory,
+4. `.icsv2ledgerrc` in home directory.
 
 **`--credit INT`**
 
