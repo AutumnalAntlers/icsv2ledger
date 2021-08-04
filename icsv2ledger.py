@@ -211,14 +211,13 @@ def parse_args_and_config_file():
     # Initialize configparser with DEFAULTS, and then read config file
     if args.config_file and ('-h' not in remaining_argv and
                              '--help' not in remaining_argv):
+        config = configparser.RawConfigParser(DEFAULTS)
         # For .yaml files
-        if args.config_file.endswith('.yaml') or args.config_file.endswith('.yml'):
+        if args.config_file.endswith(('.yaml', '.yml')):
             with open(args.config_file, 'r') as stream:
                 try:
                     from yaml import safe_load, YAMLError
-                    config = configparser.RawConfigParser(DEFAULTS)
                     result=safe_load(stream)
-                    print(result)
                     config.read_dict(result)
                 except (ImportError, ModuleNotFoundError) as exc:
                     print(exc)
@@ -231,7 +230,6 @@ def parse_args_and_config_file():
                     sys.exit(1)
         # For original configparser files
         else:
-            config = configparser.RawConfigParser(DEFAULTS)
             config.read(args.config_file)
 
         if not config.has_section(args.account):
