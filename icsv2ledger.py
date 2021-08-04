@@ -117,25 +117,20 @@ DEFAULTS = dotdict({
     'prompt_add_mappings': False,
     'entry_review': False})
 
+FILE_SEARCH_PATH = ['.', os.path.expanduser('~')]
+def potential_file_locs(basename):
+    potential_locs = [os.path.join(directory, basename) for directory in FILE_SEARCH_PATH]
+    return potential_locs
+
 FILE_DEFAULTS = dotdict({
     # Re-phrased into Bash for clarity, this list comprehension
     # generates: {'./',"$HOME/"}.icsv2ledgerrc{'','.yaml','.yml'}
-    'config_file': (list(chain.from_iterable([
-        [os.path.join(root, '.icsv2ledgerrc') + suffix
-            for suffix in ['', '.yaml', '.yml']]
-                for root in ['.', os.path.expanduser('~')]]))),
-    'ledger_file': [
-        os.path.join('.', '.ledger'),
-        os.path.join(os.path.expanduser('~'), '.ledger')],
-    'mapping_file': [
-        os.path.join('.', '.icsv2ledgerrc-mapping'),
-        os.path.join(os.path.expanduser('~'), '.icsv2ledgerrc-mapping')],
-    'accounts_file': [
-        os.path.join('.', '.icsv2ledgerrc-accounts'),
-        os.path.join(os.path.expanduser('~'), '.icsv2ledgerrc-accounts')],
-    'template_file': [
-        os.path.join('.', '.icsv2ledgerrc-template'),
-        os.path.join(os.path.expanduser('~'), '.icsv2ledgerrc-template')],
+    'config_file': list(chain.from_iterable([
+                       potential_file_locs('.icsv2ledgerrc' + suffix) for suffix in ['', '.yaml', '.yml']])),
+    'ledger_file':   potential_file_locs('.ledger'),
+    'mapping_file':  potential_file_locs('.icsv2ledgerrc-mapping'),
+    'accounts_file': potential_file_locs('.icsv2ledgerrc-accounts'),
+    'template_file': potential_file_locs('.icsv2ledgerrc-template'),
     'ledger_binary_file': [
         '/usr/bin/ledger',
         '/usr/local/bin/ledger'
