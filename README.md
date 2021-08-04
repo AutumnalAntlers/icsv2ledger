@@ -148,15 +148,16 @@ are `*` or `!` or ` `. Default is `*`.
 
 is configuration filename.
 
-Filenames ending in .yaml will be parsed with PyYAML,
+Filenames ending in `.yaml` or `.yml` will be parsed with PyYAML,
 otherwise with configparser (INI style, see examples).
 
-The file used will be first found in that order:
+The file used will be the first one found in the following order.
+Note that Steps 2 & 3 also check for `.yaml` & `.yml` varients, in
+that order (ie. `.icsv2ledgerrc.yml`).
 
 1. Filename given on command line with `--config-file`,
-2. `config.yaml`    in current directory,
-3. `.icsv2ledgerrc` in current directory,
-4. `.icsv2ledgerrc` in home directory.
+2. `.icsv2ledgerrc` (+YAML varients) in current directory,
+3. `.icsv2ledgerrc` (+YAML varients) in home directory.
 
 **`--credit INT`**
 
@@ -422,34 +423,42 @@ YAML configuration example
 --------------------------
 
 Configuration files ending in `.yaml` or `.yml` will be parsed with
-PyYaml if availible, allowing the use of anchors, filters, and other
-YAML-spec features.
+PyYAML if availible, allowing for the use of anchors, filters, and
+other YAML-spec features.
 
 Note that options are an unordered list, and that the `desc` field
 must be quoted to explicitly denote a string.
 
     ---
-    
-    BROKERAGE_ACCT: &BROKERAGE_ACCT
-      currency: USD
-      ledger_date_format: '%Y/%m/%d'
-      ledger-decimal-comma: 1
-      skip_lines: 1
-      credit: 0
-      mapping_file: ./mappings/BROKERAGE_ACCT.map
-      account: Assets:Brokerage:Example
-      csv_date_format: '%Y-%m-%dT%H:%M:%S.%fZ'
-      reverse: 0
-      date: 3
-      desc: '2,7'
-      debit: 5
-    
-    BROKERAGE_FILLS:
-      <<: *BROKERAGE_ACCT
-      mapping_file: ./mappings/BROKERAGE_FILLS.map
-      date: 5
-      desc: '4'
-      debit: 11
+
+    SAV: &sav_anchor
+      account:  Assets:Bank:Savings Account
+      currency: AUD
+      date:     1
+      csv_date_format:    %d-%b-%y
+      ledger_date_format: %Y/%m/%d
+      desc:  '6'
+      credit: 2
+      debit: -1
+      mapping_file: mappings.SAV
+
+    SAV_addons:
+      beneficiary: 3
+      purpose:     4
+
+
+    CHQ:
+      # This use of an anchor designates `CHQ` as an extension of `SAV`,
+      # inheriting it's values (currency, date, ledger_date_format, etc.)
+      # as defaults.
+      <<: *sav_anchor
+      account: Assets:Bank:Cheque Account
+      csv_date_format: %d/%m/%Y
+      desc:  '2'
+      credit: 3
+      debit:  4
+      mapping_file: mappings.CHQ
+      skip_lines: 0
 
 
 Addons
